@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+var program = require("commander");
+var pkg = require("../package.json");
+var raikou = require("../");
+
+program.version(pkg.version)
+
+program.parse(process.argv)
+
+if(program.args.length < 1){
+  raikou.server(process.cwd());
+}
