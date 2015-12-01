@@ -1,6 +1,6 @@
 {
   "name": "raikou",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./lib/index.js",
   "bugs": "https://github.com/onlinemad/raikou/issues",
   "repository": {
