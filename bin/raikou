@@ -1,15 +1,50 @@
 #!/usr/bin/env node
 
-var program = require("commander");
-var pkg = require("../package.json");
-var raikou = require("../");
+var program = require('commander');
+var pkg = require('../package.json');
+var raikou = require('../');
+var fse = require('fs.extra');
 
 program.version(pkg.version);
 
 program
-  .command("polymer")
+  .command('polymer')
   .action(function(program){
     raikou.server(process.cwd(), { polymer: true });
+  });
+
+program
+  .command('init [path]')
+  .description('Initialize a new Raikou project in current directory')
+  .action(function(path, program){
+    if(!path) {
+      console.log('Sorry, path is undefined.');
+      return
+    } 
+    var projectPath = process.cwd() + '/' + path;
+
+    fse.mkdirp(projectPath, function(err){
+      if(err) return err
+
+      fse.readdir(projectPath, function(err, contents){
+
+        if(err) return err
+
+        if(contents.length !== 0){
+          console.log('Sorry,', projectPath, 'must be empty.')
+          return
+        }
+        fse.copyRecursive( __dirname + '../../example/jade', projectPath, function (err) {
+          if (err) {
+            console.log('copy error');
+            throw err;
+          } else {
+            console.log('Initialized project at', projectPath);
+            return;
+          }
+        });
+      });
+    });
   });
 
 program.parse(process.argv);
